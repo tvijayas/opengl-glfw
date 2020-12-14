@@ -222,17 +222,20 @@ int main()
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
  
-        mat4x4_identity(m);
+      
+#ifdef CAM_ROTATE
         //mat4x4_rotate_Z(m, m, (float) glfwGetTime());
         //mat4x4_rotate_Y(m, m, (float) glfwGetTime());
         mat4x4_rotate_X(m, m, (float) glfwGetTime());
+#else        
+        mat4x4_rotate_X(m, m, (float) 0.0);
         mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
         mat4x4_mul(mvp, p, m);
-       
-        glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
         //glDrawArrays(GL_TRIANGLES, 1, 3);
+#endif
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
